@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitácora de la Huerta Escolar</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --parchment: #F3EEE3;
+    --parchment-alt: #EAE1CE;
+    --ink: #1E2A22;
+    --forest: #2F4A3D;
+    --forest-deep: #17261F;
+    --gold: #C9A227;
+    --clay: #A85C32;
+    --sage: #8CA88A;
+    --line: rgba(30, 42, 34, 0.18);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3 { font-family: 'Fraunces', serif; margin: 0; }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    color: var(--clay);
+  }
+
+  header.hero {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(140, 168, 138, 0.35), transparent 45%),
+      linear-gradient(160deg, var(--forest-deep), var(--forest));
+    color: var(--parchment);
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+    border-bottom: 6px solid var(--gold);
+  }
+
+  header.hero .eyebrow { color: var(--sage); }
+
+  header.hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 900;
+    margin: 0.6rem 0 1rem;
+  }
+
+  header.hero p {
+    max-width: 42ch;
+    margin: 0 auto;
+    opacity: 0.85;
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  section:last-of-type { border-bottom: none; }
+
+  section > .eyebrow { display: block; margin-bottom: 0.6rem; }
+
+  section h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+
+  #objetivo p {
+    max-width: 60ch;
+    font-size: 1.05rem;
+  }
+
+  /* --- Especies: tarjetas estilo sobre de semillas --- */
+  .especies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .semilla-card {
+    background: var(--parchment-alt);
+    border: 1.5px dashed var(--forest);
+    border-radius: 2px;
+    padding: 1.4rem 1.2rem;
+    position: relative;
+    transform: rotate(var(--tilt, -1deg));
+    transition: transform 0.2s ease;
+  }
+
+  .semilla-card:nth-child(even) { --tilt: 1deg; }
+  .semilla-card:hover { transform: rotate(0deg) translateY(-3px); }
+
+  .semilla-card .sello {
+    position: absolute;
+    top: -0.8rem;
+    right: -0.6rem;
+    background: var(--gold);
+    color: var(--forest-deep);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 50%;
+    width: 2.4rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .semilla-card h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
+  .semilla-card p { margin: 0; font-size: 0.92rem; color: rgba(30,42,34,0.75); }
+
+  /* --- Cronograma --- */
+  table.cronograma {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  table.cronograma caption { text-align: left; margin-bottom: 0.6rem; }
+
+  table.cronograma th, table.cronograma td {
+    text-align: left;
+    padding: 0.75rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  table.cronograma thead th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--clay);
+  }
+
+  table.cronograma tbody tr:hover { background: rgba(140, 168, 138, 0.12); }
+
+  /* --- Interactivo: riego --- */
+  .riego-box {
+    margin-top: 1.5rem;
+    background: var(--forest-deep);
+    color: var(--parchment);
+    border-radius: 4px;
+    padding: 1.6rem;
+  }
+
+  .riego-box button {
+    font-family: 'Space Mono', monospace;
+    background: var(--gold);
+    color: var(--forest-deep);
+    border: none;
+    padding: 0.7rem 1.2rem;
+    font-weight: 700;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .riego-box button:hover { background: var(--sage); }
+
+  #riego-resultado {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    margin-top: 1rem;
+    line-height: 1.8;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(30,42,34,0.6);
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="eyebrow">Proyecto de huerta escolar</span>
+  <h1>Bitácora de la Huerta Escolar</h1>
+  <p>Documentamos, cultivo a cultivo, el trabajo de nuestra huerta: qué plantamos, por qué, y cómo la cuidamos semana a semana.</p>
+</header>
+
+<main>
+
+  <section id="objetivo">
+    <span class="eyebrow">Objetivo</span>
+    <h2>Por qué hacemos esta huerta</h2>
+    <p>
+      <!-- TODO (grupo): reemplazar por el objetivo real del proyecto -->
+      Nuestro objetivo es producir una parte de los vegetales que consumimos en la escuela, aprendiendo
+      en el proceso sobre ciclos de cultivo, riego responsable y trabajo en equipo. La huerta también
+      funciona como espacio de aprendizaje práctico para las materias de programación y hardware,
+      integrando sensores y registros digitales a futuro.
+    </p>
+  </section>
+
+  <section id="especies">
+    <span class="eyebrow">Especies cultivadas</span>
+    <h2>Qué plantamos</h2>
+    <!-- TODO (grupo): reemplazar estas 4 especies por las que realmente cultivan -->
+    <div class="especies-grid">
+      <article class="semilla-card">
+        <span class="sello">28d</span>
+        <h3>Lechuga mantecosa</h3>
+        <p>Cosecha rápida, ideal para los primeros ensayos del grupo.</p>
+      </article>
+      <article class="semilla-card">
+        <span class="sello">70d</span>
+        <h3>Tomate cherry</h3>
+        <p>Necesita tutor y sol pleno; la especie con más seguimiento.</p>
+      </article>
+      <article class="semilla-card">
+        <span class="sello">21d</span>
+        <h3>Albahaca</h3>
+        <p>Crecimiento rápido y buen acompañante del tomate.</p>
+      </article>
+      <article class="semilla-card">
+        <span class="sello">25d</span>
+        <h3>Rabanito</h3>
+        <p>La especie testigo: ciclo corto para ver resultados rápido.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="cronograma">
+    <span class="eyebrow">Cronograma de tareas</span>
+    <h2>Plan de trabajo semanal</h2>
+    <!-- TODO (grupo): ajustar semanas y tareas reales -->
+    <table class="cronograma">
+      <caption>Semanas 1 a 4 del proyecto</caption>
+      <thead>
+        <tr><th>Semana</th><th>Tarea</th><th>Especies involucradas</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Preparación del suelo y siembra</td><td>Lechuga, Rabanito, Albahaca</td></tr>
+        <tr><td>2</td><td>Trasplante y primer riego profundo</td><td>Tomate cherry</td></tr>
+        <tr><td>3</td><td>Deshierbe y control de plagas</td><td>Todas</td></tr>
+        <tr><td>4</td><td>Primeras cosechas y registro de resultados</td><td>Lechuga, Rabanito</td></tr>
+      </tbody>
+    </table>
+
+    <div class="riego-box">
+      <span class="eyebrow" style="color: var(--sage);">Funcionalidad interactiva</span>
+      <h3 style="color: var(--parchment); margin-top: 0.4rem;">Generar cronograma de riego</h3>
+      <p style="opacity: 0.85; font-size: 0.9rem; margin-top: 0.6rem;">
+        Calcula, a partir de los datos cargados por el grupo, cada cuántos días se riega cada especie.
+      </p>
+      <button onclick="regarHuerta()">Generar en consola</button>
+      <div id="riego-resultado"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Trabajo Práctico — Laboratorio de Programación · 6.° año, 3.ª división
+</footer>
+
+<script>
+  // ritmoDeRiego: nombre elegido por el grupo (no usado en los ejemplos de clase).
+  // Mapea cada especie cultivada a la cantidad de días entre riegos.
+  // TODO (grupo): reemplazar por los datos reales relevados en la Parte 1.
+  const ritmoDeRiego = {
+    "Lechuga mantecosa": 2,
+    "Tomate cherry": 3,
+    "Albahaca": 2,
+    "Rabanito": 1
+  };
+
+  // regarHuerta(): recorre ritmoDeRiego y arma un cronograma de riego
+  // para las próximas dos semanas (14 días), a partir de los datos propios del grupo.
+  function regarHuerta() {
+    const diasTotales = 14;
+    let salida = "Cronograma de riego (próximos 14 días)\n";
+    salida += "----------------------------------------\n";
+
+    for (const especie in ritmoDeRiego) {
+      const ritmo = ritmoDeRiego[especie];
+      const diasDeRiego = [];
+      for (let dia = 1; dia <= diasTotales; dia++) {
+        if (dia % ritmo === 0) diasDeRiego.push(dia);
+      }
+      salida += `${especie} (cada ${ritmo} día/s): día ${diasDeRiego.join(", ")}\n`;
+    }
+
+    console.log(salida);
+    document.getElementById("riego-resultado").textContent = salida;
+  }
+</script>
+
+</body>
+</html>
